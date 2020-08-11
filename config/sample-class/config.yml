@@ -1,0 +1,31 @@
+class_name: Sample Class      # the name of the course
+class_id: sample-class        # a **unique** ID for the course
+message_complete: 'Your submission was successfully received and graded.<br>'
+message_incomplete: 'If you get this message it is because you did not submit assignment. Please see the TA.<br>'
+num_containers: 4     #The number of containers
+ignore: ['.ipynb_checkpoints','.DS_Store']
+requirements: config/sample-class/requirements.txt      # Path to a **global** reuquirements file
+roster: config/sample-class/roster.xlsx
+assignments:
+    blackboard:
+      name: Sample assignment               # assignment name
+      type: bb #Either Blackboard (bb) or Github Classroom (gc)
+      extension: '.ipynb'
+      tests_path: config/sample-class/blackboard/hidden-tests                     # path to directory of tests for this assignment
+      requirements: config/sample-class/requirements.txt        # path to requirements specific to **this** assignment
+      seed: 42                      # random seed for intercell seeding
+      bb_column: 'blackboard_grade_test'  #This is the column name for uploading the file
+      files:                        # list of files needed by the autograder, e.g. data files
+        - config/files/test_data_a.csv
+        - config/files/test_data_b.csv
+    github-classroom:   # assignment ID, unique among all assignments
+      name: Sample assignment2               # assignment name
+      type: gc       #Either Blackboard (bb) or Github Classroom (gc)
+      extension: '.ipynb'
+      tests_path: config/sample-class/github-classroom/hidden-tests                     # path to directory of tests for this assignment
+      requirements: config/sample-class/requirements.txt        # path to requirements specific to **this** assignment
+      seed: 42                      # random seed for intercell seeding
+      bb_column: 'blackboard_grade_test' #This is the column name for uploading the file
+      files:                        # list of files needed by the autograder, e.g. data files
+        - config/files/test_data_a.csv
+        - config/files/test_data_b.csv
