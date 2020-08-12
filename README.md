@@ -32,8 +32,9 @@ The goal of this is to develop a robust homework grading system which combines G
   6. Verify that the appropriate files specified in the assignments are in the associated `config/course/files/` folder.
 
   7. Verify that the roster is setup in `config/course/roster.xlsx`. This includes 1 sheet which maps GitHub id to student id (if using GitHub classroom) and 1 that is a template downloaded from Blackboard.
-  8. Update the course and assignment you are grading in the cell below.
 
-**After completing the above, you are ready to launch the [grading notebook](https://github.com/jkuruzovich/otter_helper/blob/master/notebooks/grade.ipynb) and run the associated steps.**  
+  8. Update set the `course` and `assignment_id` varaibles in the `grade.ipynb` notebook to be consistent with the paths files downloaded and the `config.yml` file. To run the sample assignments, just keep `course` set to `sample-class` and select `blackboard` or `github-classroom` for the `assignment_id`.
 
-Good luck! Please post any questions here or the Otter slack channel.
+**After completing the above, you are run the [grade.ipynb notebook](https://github.com/jkuruzovich/otter_helper/blob/master/notebooks/grade.ipynb).**  
+
+Good luck! Please post any questions here or the Otter Slack channel.
