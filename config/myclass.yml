@@ -5,6 +5,7 @@ roster: config/sample-class/roster.xlsx
 assignments:                        # list of assignments
     - name: Sample Blackboard Assignment               # assignment name
       assignment_id: blackboard         # assignment ID, unique among all assignments in this config
+      extension: '.ipynb'
       type: bb #Either Blackboard (bb) or Github Classroom (gc)
       tests_path: config/sample-class/blackboard/tests                     # path to directory of tests for this assignment
       requirements: config/sample-class/requirements.txt        # path to requirements specific to **this** assignment
@@ -14,6 +15,7 @@ assignments:                        # list of assignments
         - config/files/test_data_b.csv
     - name: Sample Github Classroom Assignment               # assignment name
       assignment_id: github-classroom         # assignment ID, unique among all assignments in this config
+      extension: '.ipynb'
       type: gc #Either Blackboard or Github Classroom
       tests_path: config/sample-class/github-classroom/tests                     # path to directory of tests for this assignment
       requirements: config/sample-class/requirements.txt        # path to requirements specific to **this** assignment
@@ -21,18 +23,3 @@ assignments:                        # list of assignments
       files:                        # list of files needed by the autograder, e.g. data files
         - config/files/test_data_a.csv
         - config/files/test_data_b.csv
-
-
-
-
-
-
-source: blackbord
-delete_cells = 0
-roster = simple.xlsx
-assignments_dir = sample
-blackboard_total_col = "Homework1 [Total Pts: 300 Score] |6433"
-append_script = notebook_append.py
-tests_dir = sample
-points_per_test=5
-answers= man1, man2

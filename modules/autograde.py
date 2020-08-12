@@ -50,7 +50,6 @@ def get_config(course, assignment, base_dir):
     cf['base_path']= base_dir
     cf['assignments_path']= base_dir / ASSIGNMENTS_DIR / course / assignment
     cf['roster_path']=base_dir / CONFIG_DIR / course / ROSTER_FILE
-    cf['notebook_output_path']= base_dir / OUTPUT_DIR / course / assignment / NOTEBOOKS_DIR
     cf['grades_output_path']=  base_dir /  OUTPUT_DIR /  course / assignment
     cf['json_output_path']= base_dir / OUTPUT_DIR / course / assignment / JSON_DIR
     cf['tmp_path'] = base_dir / TMP_DIR
@@ -58,8 +57,7 @@ def get_config(course, assignment, base_dir):
     # #make required directories
     if not os.path.exists(cf['grades_output_path']):
          os.makedirs(cf['grades_output_path'])
-    if not os.path.exists(cf['notebook_output_path']):
-         os.makedirs(cf['notebook_output_path'])
+
     return cf
 
 def prepare_grade(cf,  cleanup=True):
@@ -83,7 +81,7 @@ def prepare_grade(cf,  cleanup=True):
             submission={}
             submission['identifier'] = id
             #TBD need to alert if more than 1 file.
-            status=get_notebook(cf['assignments_path'], id)
+            status=get_file(cf['assignments_path'], id, cf['assignments'][cf['grade_assignment']]['extension'])
             submission['filename']=id+"_"+status['file']
             submissions.append(submission)
             copyfile(cf['assignments_path'] / id / status['file'], cf['tmp_path'] / submission['filename'])
@@ -93,11 +91,12 @@ def prepare_grade(cf,  cleanup=True):
     elif cf['assignments'][cf['grade_assignment']]['type'] == 'bb':
         files=[os.path.join(o) for o in os.listdir(cf['assignments_path']) ]
         for file in files:
-            submission={}
-            submission['identifier']=file.split('_')[1]
-            submission['filename']=file
-            submissions.append(submission)
-            copyfile(cf['assignments_path'] / file, cf['tmp_path'] / file)
+            if file.endswith(cf['assignments'][cf['grade_assignment']]['extension']):
+                submission={}
+                submission['identifier']=file.split('_')[1]
+                submission['filename']=file
+                submissions.append(submission)
+                copyfile(cf['assignments_path'] / file, cf['tmp_path'] / file)
     else:
         print("The type is incorrect.")
     #It will grade all submissions by default.
@@ -120,7 +119,7 @@ def copy_path(from_path, to_path, overwrite=True):
         shutil.rmtree(to_path)
     shutil.copytree(from_path, to_path)
 
-def get_notebook(path, id, extension=".ipynb"):
+def get_file(path, id, extension='.ipynb'):
     #Count the number of submission files
     status={}
     status['id']=id
@@ -143,7 +142,7 @@ def get_notebook(path, id, extension=".ipynb"):
             if size > biggest_file:
                 status['file']=x
                 biggest_file=size
-        status['status_description']='2. Multiple notebooks. Grading largest file: '+str(status['file'])
+        status['status_description']='2. Multiple files. Grading largest file: '+str(status['file'])
     else:
         status['status_code']=2
         status['file']=files[0]
@@ -151,10 +150,6 @@ def get_notebook(path, id, extension=".ipynb"):
     return status
 
 def prepare_blackboard_upload(cf, archive=True):
-    #Archive Copy
-    if archive:
-        copy_path(cf['tmp_path'],cf['grades_output_path'])
-
     #Read in the grading
     grades=pd.read_csv(cf['grade_file'])
 
@@ -195,6 +190,9 @@ def prepare_blackboard_upload(cf, archive=True):
             incomplete=incomplete+1
 
     #blackboard_df.loc[index,blackboard_total_col]=mangrade_df.loc[mangrade_df[mangrade_match_col] == row[blackboard_match_col],'total'].ravel()[0]
-    blackboard.to_csv(cf['grades_output_path'] / 'upload.csv', index = False)
+    blackboard.to_csv(cf['tmp_path'] / 'upload.csv', index = False)
     print("complete:", complete,"\nIncomplete:",incomplete,"\nTotal:",complete+incomplete)
+    if archive:
+        print("Archiving files in ")
+        copy_path(cf['tmp_path'],cf['grades_output_path'])
     return blackboard
