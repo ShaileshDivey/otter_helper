@@ -1,8 +1,8 @@
-# Autograding with Otter Grader & GitHub Classroom or Blackboard
+# Autograding for Python/Jupyter/Excel using Otter Grader & GitHub Classroom or Blackboard
 
 [![Custom badge](https://img.shields.io/endpoint?logo=slack&url=https%3A%2F%2Fraw.githubusercontent.com%2Fucbds-infra%2Fotter-grader%2Fmaster%2Fslack-shields.json)](https://join.slack.com/t/otter-grader/shared_invite/enQtOTM5MTQ0MzkwMTk0LTBiNWIzZTYxNDA2NDZmM2JkMzcwZjA4YWViNDM4ZTgyNDVhNDgwOTQ0NjNlZjcwNmY5YzJiZjZhZGNhNzc5MjA)
 
-I've seen that quite a few other people teaching analytics have been discussing different autograding solutions.  This is my effort to create something that is relatively easy to use.
+I've seen that quite a few other people teaching analytics have been discussing different autograding solutions.  This is my effort to create something that is relatively easy to use and can flexibly grade excel or python assignments.  
 
 Generally, the workflow is as follows:
 
@@ -12,14 +12,21 @@ Generally, the workflow is as follows:
 
   (3) Run the grading notebook.  The grading notebook will (a.) load the configuration files with information on the setup, (b.) copy the notebook file from the github repository to a /tmp folder for grading, (c.) append grading code to the bottom of the notebook.  (d.) execute the notebook. (d.) Output a JSON file with the results.
 
-Give it a try with the attached notebook and grade the sample exercises.  The sample exercises are setup to address a number of different test cases, including 0/3 -3/3 grades, no submission, duplicate submission, etc.
+Give it a try with the attached notebook and grade the sample exercises.  
 
 # Homework Grading
 The goal of this is to develop a robust homework grading system which combines Google Colab + Jupyter Notebooks + GitHub Classroom + Otter Grader + Blackboard.
 
-### Setup
 
-  1. Make sure that Docker is installed and the Docker Daemon is running.  You can download Docker [here](https://docs.docker.com/get-docker/).
+
+### Setup
+The setup uses a based Andaconda Python installation.
+
+```
+pip install otter-grader
+```
+
+  1. If grading Python, Make sure that Docker is installed and the Docker Daemon is running.  You can download Docker [here](https://docs.docker.com/get-docker/).
 
   2. Clone the `Otter Helper` repository from [here](https://github.com/jkuruzovich/otter_helper).
 
@@ -35,6 +42,6 @@ The goal of this is to develop a robust homework grading system which combines G
 
   8. Update set the `course` and `assignment_id` varaibles in the `grade.ipynb` notebook to be consistent with the paths files downloaded and the `config.yml` file. To run the sample assignments, just keep `course` set to `sample-class` and select `blackboard` or `github-classroom` for the `assignment_id`.
 
-**After completing the above, you are run the [grade.ipynb notebook](https://github.com/jkuruzovich/otter_helper/blob/master/notebooks/grade.ipynb).**  
+**After completing the above, you are run the [grade-python.ipynb notebook](https://github.com/jkuruzovich/otter_helper/blob/master/notebooks/grade-python.ipynb) or [grade-excel.ipynb notebook](https://github.com/jkuruzovich/otter_helper/blob/master/notebooks/grade-python.ipynb).**  
 
 Good luck! Please post any questions here or the Otter Slack channel.

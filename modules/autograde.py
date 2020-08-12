@@ -191,7 +191,6 @@ def excel_grader(cf):
                 grades.loc[grow,srow['qv']]=0
         grades.loc[grow,'total']=total
         grades.loc[grow,'possible']=solution['points'].sum()
-
         grow+=1
     grades.to_csv(cf['grade_file'],index=False)
     return grades
