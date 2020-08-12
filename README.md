@@ -1,5 +1,7 @@
 # Autograding with Otter Grader & GitHub Classroom or Blackboard
 
+[![Custom badge](https://img.shields.io/endpoint?logo=slack&url=https%3A%2F%2Fraw.githubusercontent.com%2Fucbds-infra%2Fotter-grader%2Fmaster%2Fslack-shields.json)](https://join.slack.com/t/otter-grader/shared_invite/enQtOTM5MTQ0MzkwMTk0LTBiNWIzZTYxNDA2NDZmM2JkMzcwZjA4YWViNDM4ZTgyNDVhNDgwOTQ0NjNlZjcwNmY5YzJiZjZhZGNhNzc5MjA)
+
 I've seen that quite a few other people teaching analytics have been discussing different autograding solutions.  This is my effort to create something that is relatively easy to use.
 
 Generally, the workflow is as follows:
@@ -12,10 +14,26 @@ Generally, the workflow is as follows:
 
 Give it a try with the attached notebook and grade the sample exercises.  The sample exercises are setup to address a number of different test cases, including 0/3 -3/3 grades, no submission, duplicate submission, etc.
 
-### Idea for new functionality.
-Enable Variable for Manual Grading
-I had my own system similar to Otter-grader.  I'm really happy with how this looks, but one of the functionalities I previously had is not possible with current system, and I'm wondering if others might find it useful.
+# Homework Grading
+The goal of this is to develop a robust homework grading system which combines Google Colab + Jupyter Notebooks + GitHub Classroom + Otter Grader + Blackboard.
 
-Previously, I had students answer text based questions in long answer format and assign that answer to a variable name.   With that variable name I would output it to the summary grades. I would then manually grade from the csv.
+### Setup
 
-This would require a specification of variable names in the configuration.
+  1. Make sure that Docker is installed and the Docker Daemon is running.  You can download Docker [here](https://docs.docker.com/get-docker/).
+
+  2. Clone the `Otter Helper` repository from [here](https://github.com/jkuruzovich/otter_helper).
+
+  3.  Download assignment from Blackboard or GitHub and put it in the `assignments/<course>/<assignment>` directory. If you then paste your solution in this directory, it will be a good test that it was possible to get 100% on all of the tests.
+
+  4. Update the `/config/course/<course>.yml` file with the appropriate configuration and assignments.
+
+  5. Verify that the appropriate tests and data are in the associated `config/course/assignment/` folder.
+
+  6. Verify that the appropriate files specified in the assignments are in the associated `config/course/files/` folder.
+
+  7. Verify that the roster is setup in `config/course/roster.xlsx`. This includes 1 sheet which maps GitHub id to student id (if using GitHub classroom) and 1 that is a template downloaded from Blackboard.
+  8. Update the course and assignment you are grading in the cell below.
+
+**After completing the above, you are ready to launch the [grading notebook](https://github.com/jkuruzovich/otter_helper/blob/master/notebooks/grade.ipynb) and run the associated steps.**  
+
+Good luck! Please post any questions here or the Otter slack channel.
