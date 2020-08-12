@@ -26,6 +26,11 @@ assignments:
       requirements: config/sample-class/requirements.txt        # path to requirements specific to **this** assignment
       seed: 42                      # random seed for intercell seeding
       bb_column: 'blackboard_grade_test' #This is the column name for uploading the file
-      files:                        # list of files needed by the autograder, e.g. data files
-        - config/files/test_data_a.csv
-        - config/files/test_data_b.csv
+#      files:                        # list of files needed by the autograder, e.g. data files.  If unneeded, comment out 
+    blackboard-excel:
+      name: Sample Excel assignment               # assignment name
+      type: bb #Either Blackboard (bb) or Github Classroom (gc)
+      extension: '.xlsx'
+      solution_path: config/sample-class/blackboard-excel/solution.xlsx                    # path to directory of tests for this assignment
+      solution_sheet: 'answers'
+      bb_column: 'blackboard_excel_test'  #This is the column name for uploading the file

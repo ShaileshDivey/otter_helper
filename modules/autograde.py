@@ -13,6 +13,7 @@ from nbconvert.preprocessors import ExecutePreprocessor
 from nbconvert.preprocessors import CellExecutionError
 import argparse
 import os
+import numpy as np
 
 CWD = os.getcwd()
 TESTS_DIR = 'tests'
@@ -26,6 +27,10 @@ OUTPUT_DIR = 'output'
 GRADE_DIR = ''
 JSON_DIR = 'json'
 NOTEBOOKS_DIR = 'notebooks'
+META_KEY = 'identifier'
+META_FILE = 'filename'
+GRADES_KEY = 'identifier'
+GRADES_FILE = 'file'
 ROSTER_DIR = 'roster'
 TMP_DIR='tmp'
 CONFIG_DIR='config'
@@ -103,11 +108,13 @@ def prepare_grade(cf,  cleanup=True):
     with open(cf['tmp_path'] /METADATA, 'w') as fp:
         json.dump(submissions, fp, indent=4)
 
-    copy_path(cf['base_path'] / cf['assignments'][cf['grade_assignment']]['tests_path'], cf['tmp_path'] / TESTS_DIR, overwrite = False)
-    copyfile(cf['base_path'] / cf['assignments'][cf['grade_assignment']]['requirements'], cf['tmp_path'] / REQUIREMENTS_FILE)
-    for file in cf['assignments'][cf['grade_assignment']]['files']:
-        f=file.split('/')[-1]
-        copyfile(cf['base_path'] / file, cf['tmp_path'] / f)
+    if cf['assignments'][cf['grade_assignment']]['extension'] !=  '.xlsx':
+        copy_path(cf['base_path'] / cf['assignments'][cf['grade_assignment']]['tests_path'], cf['tmp_path'] / TESTS_DIR, overwrite = False)
+        copyfile(cf['base_path'] / cf['assignments'][cf['grade_assignment']]['requirements'], cf['tmp_path'] / REQUIREMENTS_FILE)
+        if 'files' in cf['assignments'][cf['grade_assignment']]:
+            for file in cf['assignments'][cf['grade_assignment']]['files']:
+                f=file.split('/')[-1]
+                copyfile(cf['base_path'] / file, cf['tmp_path'] / f)
     return submissions
 
 #Ignore Directories
@@ -148,6 +155,46 @@ def get_file(path, id, extension='.ipynb'):
         status['file']=files[0]
         status['status_description']='2. Grading '+ str(status['file'])
     return status
+
+def excel_grader(cf):
+    solution = pd.read_excel(cf['base_path'] / cf['assignments'][cf['grade_assignment']]['solution_path'], sheet_name=cf['assignments'][cf['grade_assignment']]['solution_sheet'])
+    solution['qv']=solution['question'].astype(str)+solution['variable'].astype(str)
+    solution['value']=solution['value'].astype(np.float64)
+    with open(cf['tmp_path'] / METADATA) as f:
+        assignments=json.load(f)
+    grades=pd.DataFrame()
+    #Iterate on the different assignments.
+    for assignment in assignments:
+        grow=len(grades)
+        grades.loc[grow,GRADES_KEY]= assignment[META_KEY]
+        grades.loc[grow,GRADES_FILE]= assignment[META_FILE]
+        submission = pd.read_excel(cf['tmp_path'] / assignment[META_FILE], sheet_name=cf['assignments'][cf['grade_assignment']]['solution_sheet'])
+        submission['qv']=submission['question'].astype(str)+solution['variable'].astype(str)
+        submission['value']=submission['value'].astype(np.float64)
+        total=0
+        for index, srow in submission.iterrows():
+            match_row=solution.loc[solution['qv'] == srow['qv'],:]
+            #correct = np.float64(match_row['value'].ravel()[0])
+            #answer = np.float64(match_row['value'].ravel()[0])
+            correct=match_row['value'].values[0]
+            answer=srow['value']
+            tol=match_row['tolerance'].values[0]
+            #print(match_row['value'].values[0], type(match_row['value'].values[0]))
+            #print(srow['value'], type(srow['value']) )
+            #if match_row['value'].ravel()[0]==srow['value']:
+            #if 5.0 ==
+            #    grades.loc[grow,srow['qv']]=match_row['points']
+            if np.isclose(correct,answer, tol):
+                grades.loc[grow,srow['qv']]=match_row['points'].values[0]
+                total+=match_row['points'].values[0]
+            else:
+                grades.loc[grow,srow['qv']]=0
+        grades.loc[grow,'total']=total
+        grades.loc[grow,'possible']=solution['points'].sum()
+
+        grow+=1
+    grades.to_csv(cf['grade_file'],index=False)
+    return grades
 
 def prepare_blackboard_upload(cf, archive=True):
     #Read in the grading
