@@ -7,7 +7,7 @@ test = {
 			"cases": [ 
 				{
 					"code": r"""
-					>>> np.isclose(price_by_flavor["choclate"], 3.33333333)
+					>>> np.isclose(price_by_flavor["chocolate"], 3.33333333)
 					True
 					""",
 					"hidden": False,

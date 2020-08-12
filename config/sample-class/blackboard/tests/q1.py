@@ -7,7 +7,7 @@ test = {
 			"cases": [ 
 				{
 					"code": r"""
-					>>> square(1) == 1
+					>>> square(2) == 4
 					True
 					""",
 					"hidden": False,
