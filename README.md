@@ -54,7 +54,7 @@ Once you have completed the installation, you are ready to start grading your as
 
   5. Verify that the roster is setup in `config/course/roster.xlsx`. This includes 1 sheet which maps GitHub id to student id (if using GitHub classroom) and 1 that is a template downloaded from Blackboard.
 
-  6. Update set the `course` and `assignment_id` varaibles in the `grade.ipynb` notebook to be consistent with the paths files downloaded and the `config.yml` file. To run the sample assignments, just keep `course` set to `sample-class` and select `blackboard` or `github-classroom` for the `assignment_id`.
+
 
 **After completing the above, you are run the [grade-python.ipynb notebook](https://github.com/jkuruzovich/otter_helper/blob/master/notebooks/grade-python.ipynb) or [grade-excel.ipynb notebook](https://github.com/jkuruzovich/otter_helper/blob/master/notebooks/grade-python.ipynb).**  
 
