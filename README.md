@@ -6,7 +6,7 @@ I've seen that quite a few other people teaching analytics have been discussing 
 
 You can watch a video walkthrough of the project here:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/3PnOA6UMK9w" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![](http://img.youtube.com/vi/3PnOA6UMK9w/0.jpg)](http://www.youtube.com/watch?v=3PnOA6UMK9w "Video Overview of Project")
 
 Generally, the workflow is as follows:
 
