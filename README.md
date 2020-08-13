@@ -21,6 +21,7 @@ The setup uses a based Andaconda Python installation.
 Clone the `Otter Helper` repository from [here](https://github.com/jkuruzovich/otter_helper).
 
 *Docker*
+
 I find it is best to customize your docker container and build it if grading locally. If you add your requirements for a single class docker container and not to each assignment, overall grading will go much faster. Make sure that Docker is installed and the Docker Daemon is running.  You can download Docker [here](https://docs.docker.com/get-docker/).
 
 Uncomment the cells below and run it. Be sure to keep the ! as this is run via the command line.
@@ -31,7 +32,8 @@ Additional information on building the Docker image can be found here.
 docker build . -t otter-helper:latest
 ```
 
-*Otter*
+*Otter Package Installation*
+
 Use the command below to install Otter Grader.
 ```
 pip install otter-grader
