@@ -4,6 +4,10 @@
 
 I've seen that quite a few other people teaching analytics have been discussing different autograding solutions.  This is my effort to create something that is relatively easy to use and can flexibly grade Excel or Python assignments.  
 
+You can watch a video walkthrough of the project here:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3PnOA6UMK9w" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 Generally, the workflow is as follows:
 
   (1) Use [GitHub Classroom](https://classroom.github.com) or Blackboard to collect assignments.  I can hear you already, I don't want to use git, it is too complicated.  It really is extremely easy, and it is a good learning experience for the students.  If you aren't a git users, you can easily [drag and drop a file to GitHub using the Web interface.](https://help.github.com/en/github/managing-files-in-a-repository/adding-a-file-to-a-repository)
