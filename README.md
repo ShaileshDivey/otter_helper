@@ -18,14 +18,16 @@ Give it a try with the attached notebook and grade the sample exercises.
 The goal of this is to develop a robust homework grading system which combines Google Colab + Jupyter Notebooks + GitHub Classroom + Otter Grader + Blackboard.
 
 
-
-### Setup
+### Installation
 The setup uses a based Andaconda Python installation.
 
 ```
 pip install otter-grader
 ```
 
+After installing you must be able to run the command `otter -help` from the command line. 
+
+### Grading
   1. If grading Python, Make sure that Docker is installed and the Docker Daemon is running.  You can download Docker [here](https://docs.docker.com/get-docker/).
 
   2. Clone the `Otter Helper` repository from [here](https://github.com/jkuruzovich/otter_helper).
