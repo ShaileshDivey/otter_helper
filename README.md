@@ -6,7 +6,7 @@ I've seen that quite a few other people teaching analytics have been discussing 
 
 You can watch a video walkthrough of the project here:
 
-[![](http://img.youtube.com/vi/3PnOA6UMK9w/0.jpg)](http://www.youtube.com/watch?v=3PnOA6UMK9w "Video Overview of Project")
+[![Video Overview](http://img.youtube.com/vi/__yUvsV1xsU/0.jpg)](http://www.youtube.com/watch?v=__yUvsV1xsU "Video Overview")
 
 Generally, the workflow is as follows:
 
