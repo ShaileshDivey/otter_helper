@@ -27,3 +27,7 @@ tmp/*
 tmp/*/*
 output/*
 output/*/*
+assignments/*
+assignments/*/*
+config/*
+config/*/*
