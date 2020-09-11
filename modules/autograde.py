@@ -211,7 +211,7 @@ def prepare_blackboard_upload(cf, archive=True):
 
     elif cf['assignments'][cf['grade_assignment']]['type'] == 'bb':
         grades.rename(columns={'identifier': 'Username'}, inplace=True)
-
+        
     grades.sort_values(by=['Username'], inplace=True)
 
     #Iterate through blackboard.
