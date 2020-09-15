@@ -216,7 +216,7 @@ def excel_grader(cf):
     grades.to_csv(cf['grade_file'],index=False)
     return grades
 
-def prepare_blackboard_upload(cf, archive=True):
+def prepare_blackboard_upload(cf, archive=True, details=True):
     #Read in the grading
     grades=pd.read_csv(cf['grade_file'])
 
@@ -241,15 +241,20 @@ def prepare_blackboard_upload(cf, archive=True):
     incomplete = 0
 
     for index, row in blackboard.iterrows():
-        match_row=grades.loc[grades['Username'] == row['Username'],:'possible']
+        match_row=grades.loc[grades['Username'] == row['Username'],:]
+        #print(match_row)
         if len(match_row)>0:
             complete =complete+1
             text=""
+
             for x in match_row.columns:
                 text=text+x+": "+str( match_row[x].ravel()[0])+"<br>"
                 blackboard.loc[index,cf['assignments'][cf['grade_assignment']]['bb_column']]=match_row['total'].ravel()[0]
                 blackboard.loc[index,'Feedback Format']='HTML'
-                blackboard.loc[index,'Feedback to Learner']=cf['message_complete']+text
+                if details:
+                    blackboard.loc[index,'Feedback to Learner']=cf['message_complete']+text
+                else:
+                    blackboard.loc[index,'Feedback to Learner']=cf['message_complete']
         else:
             incomplete =incomplete+1
             blackboard.loc[index,cf['assignments'][cf['grade_assignment']]['bb_column']]=0
