@@ -46,10 +46,10 @@ RUN wget --quiet -O /tmp/wkhtmltopdf.deb https://github.com/wkhtmltopdf/packagin
 # Postgres
 RUN apt-get clean && \
     apt-get update && \
-    apt-get install -y postgresql postgresql-client libpq-dev
+    apt-get install -y postgresql postgresql-client libpq-dev libopencv-dev python3-opencv --fix-missing
 
 # Python requirements
 ADD requirements.txt /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt
 
-RUN pip install otter-grader==1.1.4
+RUN pip install otter-grader==1.1.1
