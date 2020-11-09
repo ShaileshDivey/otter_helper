@@ -1,0 +1,6 @@
+otter-grader
+xlrd
+openpyxl
+seaborn
+bs4
+opencv-python

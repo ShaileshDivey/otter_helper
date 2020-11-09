@@ -158,8 +158,9 @@ def get_file(path, id, extension='.ipynb'):
 
 def excel_grader(cf):
     solution = pd.read_excel(cf['base_path'] / cf['assignments'][cf['grade_assignment']]['solution_path'], sheet_name=cf['assignments'][cf['grade_assignment']]['solution_sheet'])
-    solution['qv']=solution['question'].astype(str)+solution['variable'].astype(str)
-    solution['value']=solution['value'].astype(np.float64)
+    #solution['qv']=solution['question'].astype(str)+solution['variable'].astype(str)
+    solution['qv']=solution['variable'].astype(str)
+    solution['answer']=solution['answer'].astype(np.float64)
     with open(cf['tmp_path'] / METADATA) as f:
         assignments=json.load(f)
     grades=pd.DataFrame()
@@ -168,34 +169,54 @@ def excel_grader(cf):
         grow=len(grades)
         grades.loc[grow,GRADES_KEY]= assignment[META_KEY]
         grades.loc[grow,GRADES_FILE]= assignment[META_FILE]
-        submission = pd.read_excel(cf['tmp_path'] / assignment[META_FILE], sheet_name=cf['assignments'][cf['grade_assignment']]['solution_sheet'])
-        submission['qv']=submission['question'].astype(str)+solution['variable'].astype(str)
-        submission['value']=submission['value'].astype(np.float64)
+        try:
+            submission = pd.read_excel(cf['tmp_path'] / assignment[META_FILE], sheet_name=cf['assignments'][cf['grade_assignment']]['solution_sheet'])
+        except:
+            print("Error opening ",assignment[META_FILE])
+            grades.loc[grow,'STATUS']= "FILE-ERROR"
+            continue
+
+        submission.columns = submission.columns.str.lower()
+        print(assignment[META_FILE], submission.columns)
+        #submission['qv']=submission['question'].astype(str)+solution['variable'].astype(str)
+        submission['qv']=solution['variable'].astype(str)
         total=0
         for index, srow in submission.iterrows():
+            #print('match',srow['qv'], solution['qv'])
             match_row=solution.loc[solution['qv'] == srow['qv'],:]
+            #print(match_row)
             #correct = np.float64(match_row['value'].ravel()[0])
             #answer = np.float64(match_row['value'].ravel()[0])
-            correct=match_row['value'].values[0]
-            answer=srow['value']
-            tol=match_row['tolerance'].values[0]
-            #print(match_row['value'].values[0], type(match_row['value'].values[0]))
-            #print(srow['value'], type(srow['value']) )
-            #if match_row['value'].ravel()[0]==srow['value']:
-            #if 5.0 ==
-            #    grades.loc[grow,srow['qv']]=match_row['points']
-            if np.isclose(correct,answer, tol):
-                grades.loc[grow,srow['qv']]=match_row['points'].values[0]
-                total+=match_row['points'].values[0]
-            else:
-                grades.loc[grow,srow['qv']]=0
+            if len(match_row)>0:
+                correct=match_row['answer'].values[0]
+                answer=srow['answer']
+                tol=match_row['tolerance'].values[0]
+                points=match_row['points'].values[0]
+                grades.loc[grow,"sub-"+srow['qv']]=answer
+                grades.loc[grow,"answer-"+srow['qv']]=correct
+                grades.loc[grow,'pos-'+srow['qv']]=points
+                #print(match_row['value'].values[0], type(match_row['value'].values[0]))
+                #print(srow['value'], type(srow['value']) )
+                #if match_row['value'].ravel()[0]==srow['value']:
+                #if 5.0 ==
+                #    grades.loc[grow,srow['qv']]=match_row['points']
+                if not isinstance(answer, str):
+                    if np.isclose(correct,answer, tol):
+                        grades.loc[grow,'pts-'+srow['qv']]=match_row['points'].values[0]
+                        total+=match_row['points'].values[0]
+                    else:
+                        grades.loc[grow,'pts-'+srow['qv']]=0
+                else:
+                    grades.loc[grow,'pts-'+srow['qv']]=np.nan
+
         grades.loc[grow,'total']=total
         grades.loc[grow,'possible']=solution['points'].sum()
+        grades.loc[grow,'STATUS']= "GRADED"
         grow+=1
     grades.to_csv(cf['grade_file'],index=False)
     return grades
 
-def prepare_blackboard_upload(cf, archive=True):
+def prepare_blackboard_upload(cf, archive=True, details=True):
     #Read in the grading
     grades=pd.read_csv(cf['grade_file'])
 
@@ -211,7 +232,7 @@ def prepare_blackboard_upload(cf, archive=True):
 
     elif cf['assignments'][cf['grade_assignment']]['type'] == 'bb':
         grades.rename(columns={'identifier': 'Username'}, inplace=True)
-        
+
     grades.sort_values(by=['Username'], inplace=True)
 
     #Iterate through blackboard.
@@ -220,15 +241,20 @@ def prepare_blackboard_upload(cf, archive=True):
     incomplete = 0
 
     for index, row in blackboard.iterrows():
-        match_row=grades.loc[grades['Username'] == row['Username'],:'possible']
+        match_row=grades.loc[grades['Username'] == row['Username'],:]
+        #print(match_row)
         if len(match_row)>0:
             complete =complete+1
             text=""
+
             for x in match_row.columns:
                 text=text+x+": "+str( match_row[x].ravel()[0])+"<br>"
                 blackboard.loc[index,cf['assignments'][cf['grade_assignment']]['bb_column']]=match_row['total'].ravel()[0]
                 blackboard.loc[index,'Feedback Format']='HTML'
-                blackboard.loc[index,'Feedback to Learner']=cf['message_complete']+text
+                if details:
+                    blackboard.loc[index,'Feedback to Learner']=cf['message_complete']+text
+                else:
+                    blackboard.loc[index,'Feedback to Learner']=cf['message_complete']
         else:
             incomplete =incomplete+1
             blackboard.loc[index,cf['assignments'][cf['grade_assignment']]['bb_column']]=0
