@@ -1,6 +1,51 @@
-otter-grader
+datascience
+jupyter_client
+ipykernel
+matplotlib
+pandas
+ipywidgets
+scipy
+scikit-learn
+tqdm
+codecov
+jinja2
+docker
+# git+https://github.com/chrispyles/nbpdfexport.git
+# nb2pdf<0.6.0
+requests
+nbconvert<6.0.0
+nbformat
+dill
+pdfkit
+PyPDF2
+
+# ottr requirements
+rpy2
+jupytext
+
+# otter service requirements
+psycopg2
+queries
+pyyaml
+docker
+PyJWT
+tornado
+stdio-proxy
+
+# testing requirements
+# testing.postgresql
+git+https://github.com/tk0miya/testing.postgresql.git@c81ded434d00ec8424de0f9e1f4063c778c6aaa8
+responses
+
+# documentation requirements
+recommonmark
+sphinx_markdown_tables
+sphinx-book-theme==0.0.29
+sphinxcontrib-apidoc
+sphinx-argparse
 xlrd
 openpyxl
 seaborn
 bs4
 opencv-python
+scikit-learn
